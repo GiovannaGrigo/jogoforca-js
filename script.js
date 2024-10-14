@@ -33,15 +33,48 @@ function checarLetra(letra) {
     for(let i = 0; i < palavraSecreta.length; i++){
         if(palavraSecreta[i] == letra.toLowerCase()){
             achou = true;
-            //
+            palavraOculta= trocaLetra(palavraOculta, letra, i)
         }
     }
+    document.querySelector('h2').innerHTML = palavraOculta;
     btn.classList.remove('btn-outline-dark');
     btn.classList.add(achou ? 'btn-primary' : 'btn-danger');
     if(!achou){
         tentativasUsadas += 1;
         desenharForca();
     }
+    checarJogo();
+}
+
+function checarJogo() {
+    if (tentativasUsadas == 6)
+    {
+        Swal.fire({
+            icon: 'error',
+            title: 'Ooops...',
+            text: 'Você perdeu!!'
+        });
+        jogando = false;
+        document.getElementById('btnReiniciar').classList.remove('d-none');
+    }
+    let listaTexto = palavraOculta.split(' ');
+    let novaPalavra = listaTexto.join('');
+    if (novaPalavra.toLowerCase() == palavraSecreta)
+    {
+        Swal.fire({
+            icon: 'success',
+            title: 'Parabéns!',
+            text: 'Você acertou!!'
+        });
+        jogando = false;
+        document.getElementById('btnReiniciar').classList.remove('d-none');
+    }
+}
+
+function trocaLetra(textoOriginal, letra, posicao) {
+    let listaTexto = textoOriginal.split(' ');
+    listaTexto[posicao] = letra;
+    return listaTexto.join(' ');
 }
 
 function desenharForca() {
